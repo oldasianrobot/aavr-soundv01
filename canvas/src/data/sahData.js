@@ -14,12 +14,12 @@ const MAX_COUNT = 4533
 // Weighted palette: dusty rose / slate blue / terracotta tones.
 // Weights based on STOP AAPI Hate 2020-2021 report proportions.
 const OFFENSE_PALETTE = [
-  { key: 'verbal_harassment', color: '#E8C5B8', weight: 0.63  }, // 63% — dusty rose
-  { key: 'physical_assault',  color: '#C4704A', weight: 0.16  }, // 16% — terracotta
-  { key: 'avoidance',         color: '#7B9BB5', weight: 0.16  }, // 16% — slate blue
-  { key: 'civil_rights',      color: '#9EB5C4', weight: 0.115 }, // 11.5% — soft blue
-  { key: 'online_harassment', color: '#D4A8A0', weight: 0.086 }, // 8.6% — muted rose
-  { key: 'property_damage',   color: '#B8A898', weight: 0.06  }, // 6% — warm gray
+  { key: 'verbal_harassment', color: '#E8C5B8', weight: 0.600 }, // 60% — dusty rose
+  { key: 'physical_assault',  color: '#C4704A', weight: 0.152 }, // 15.2% — terracotta
+  { key: 'avoidance',         color: '#7B9BB5', weight: 0.152 }, // 15.2% — slate blue
+  { key: 'civil_rights',      color: '#9EB5C4', weight: 0.049 }, // 4.9% — soft blue
+  { key: 'online_harassment', color: '#D4A8A0', weight: 0.028 }, // 2.8% — muted rose
+  { key: 'property_damage',   color: '#B8A898', weight: 0.019 }, // 1.9% — warm gray
 ]
 
 const CUMULATIVE = OFFENSE_PALETTE.reduce((acc, item, i) => {

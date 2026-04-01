@@ -46,3 +46,17 @@ describe('incidentToSize', () => {
   it('maps min to ~1.2', () => expect(incidentToSize(497)).toBeCloseTo(1.2, 1))
   it('maps max to ~5.5', () => expect(incidentToSize(4533)).toBeCloseTo(5.5, 1))
 })
+
+describe('incidentToTrailLength', () => {
+  it('maps min to 6', () => expect(incidentToTrailLength(497)).toBeCloseTo(6, 0))
+  it('maps max to 22', () => expect(incidentToTrailLength(4533)).toBeCloseTo(22, 0))
+})
+
+describe('sampleIncidentCount', () => {
+  it('returns a value from the known set', () => {
+    const KNOWN = [3795, 4533, 2227, 1751, 497]
+    for (let i = 0; i < 50; i++) {
+      expect(KNOWN).toContain(sampleIncidentCount())
+    }
+  })
+})

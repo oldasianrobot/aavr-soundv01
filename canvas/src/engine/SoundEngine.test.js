@@ -70,4 +70,17 @@ describe('SoundEngine', () => {
     expect(SoundEngine.getToneParams('verbal_harassment', 'sah')).toEqual({ wave: 'sine', freq: 440 })
     expect(SoundEngine.getToneParams('physical_assault', 'sah')).toEqual({ wave: 'sawtooth', freq: 1400 })
   })
+
+  it('evicts oldest voice when MAX_VOICES (8) is exceeded', () => {
+    SoundEngine.init()
+    SoundEngine.unmute()
+    // Fill to capacity
+    for (let i = 0; i < 8; i++) {
+      SoundEngine.playTone('intimidation', 'fbi')
+    }
+    expect(SoundEngine._voices.length).toBe(8)
+    // 9th tone should evict oldest
+    SoundEngine.playTone('intimidation', 'fbi')
+    expect(SoundEngine._voices.length).toBe(8)
+  })
 })
