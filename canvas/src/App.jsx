@@ -1,3 +1,9 @@
+import GenerativeCanvas from './components/GenerativeCanvas.jsx'
+
 export default function App() {
-  return <div style={{ padding: 32, fontFamily: 'sans-serif' }}>This Is Not a Gap — Sound Canvas</div>
+  return (
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <GenerativeCanvas act="fbi" />
+    </div>
+  )
 }
