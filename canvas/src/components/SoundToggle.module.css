@@ -1,0 +1,42 @@
+.toggle {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px solid var(--color-ink-hairline);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.toggle:hover {
+  border-color: var(--color-ink-muted);
+  background: rgba(26, 26, 46, 0.04);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ink-muted);
+  flex-shrink: 0;
+}
+
+.dot.active {
+  background: var(--color-ink);
+  box-shadow: 0 0 0 2px rgba(26, 26, 46, 0.15);
+}
