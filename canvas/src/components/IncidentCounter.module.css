@@ -1,0 +1,33 @@
+.counter {
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  margin-bottom: 4px;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.separator {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--color-ink-hairline);
+  margin-top: 6px;
+  letter-spacing: 0.1em;
+}
