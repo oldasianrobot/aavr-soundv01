@@ -1,0 +1,11 @@
+offense_category,offense_type,pct_of_total,notes
+Crimes Against Persons,Intimidation,38%,"Threats; no physical contact. Largest single offense category."
+Crimes Against Property,Vandalism/Destruction of Property,29%,"Graffiti, property damage, defacement"
+Crimes Against Persons,Simple Assault,26%,"Physical attack without weapon or serious injury"
+Crimes Against Persons,Aggravated Assault,14%,"Attack with weapon or resulting in serious bodily injury"
+Crimes Against Persons,Murder/Non-Negligent Manslaughter,<1%,"Fatal attacks"
+Crimes Against Persons,Forcible Rape,<1%,"Sexual assault"
+Crimes Against Property,Arson,<1%,"Deliberate fire-setting"
+Crimes Against Property,Larceny/Theft,<1%,"Theft of property"
+Crimes Against Property,Burglary,<1%,"Breaking and entering"
+Crimes Against Society,Drug/Narcotic Offenses,<1%,"Rare; bias-motivated drug offenses"

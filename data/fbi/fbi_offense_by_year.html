@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FBI Anti-Asian Hate Crimes — Offense Type by Year</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      color: #e0e0e0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      padding: 32px;
+    }
+
+    h1 {
+      font-size: 14px;
+      font-weight: normal;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: #444;
+      margin-bottom: 32px;
+      letter-spacing: 0.05em;
+    }
+
+    /* LEGEND */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 24px;
+      margin-bottom: 32px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #aaa;
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* DIVIDERS */
+    .legend-divider {
+      width: 100%;
+      font-size: 10px;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+
+    /* TABLE */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 900px;
+    }
+
+    thead th {
+      padding: 10px 8px 8px;
+      font-size: 10px;
+      font-weight: normal;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+      border-bottom: 1px solid #222;
+      white-space: nowrap;
+    }
+
+    thead th.year-col {
+      text-align: left;
+      color: #555;
+      width: 60px;
+    }
+
+    thead th.total-col {
+      color: #888;
+      width: 60px;
+    }
+
+    /* Offense type headers get their color as text */
+    thead th.offense {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      height: 120px;
+      vertical-align: bottom;
+      padding-bottom: 10px;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #111;
+    }
+
+    tbody tr:hover {
+      background: #111;
+    }
+
+    tbody td {
+      padding: 7px 8px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    tbody td.year-cell {
+      text-align: left;
+      color: #666;
+      font-size: 11px;
+    }
+
+    tbody td.total-cell {
+      color: #ccc;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    tbody td.count-cell {
+      font-size: 11px;
+      color: #111;
+      font-weight: bold;
+      min-width: 48px;
+    }
+
+    tbody td.empty-cell {
+      color: #1f1f1f;
+      font-size: 10px;
+    }
+
+    tbody td.gap-cell {
+      color: #222;
+      font-size: 9px;
+      letter-spacing: 0.05em;
+      font-style: italic;
+    }
+
+    /* status indicators */
+    .status-verified   { color: #555; font-size: 9px; }
+    .status-estimated  { color: #3a3a1a; font-size: 9px; }
+    .status-gap        { color: #1f1f1f; font-size: 9px; }
+
+    /* NOTES */
+    .notes {
+      margin-top: 32px;
+      font-size: 10px;
+      color: #333;
+      line-height: 1.8;
+      max-width: 860px;
+    }
+
+    .notes p { margin-bottom: 6px; }
+
+    .note-verified  { color: #666; }
+    .note-estimated { color: #555; }
+    .note-gap       { color: #333; }
+
+    /* year flags */
+    .flag-nibrs { font-size: 9px; color: #3a3010; margin-left: 4px; }
+    .flag-split { font-size: 9px; color: #10253a; margin-left: 4px; }
+    .flag-peak  { font-size: 9px; color: #3a1010; margin-left: 4px; }
+  </style>
+</head>
+<body>
+
+<h1>FBI Anti-Asian Hate Crimes — Offense Type by Year</h1>
+<p class="subtitle">United States · 1991–2023 · Source: FBI UCR / NIBRS · Bias motivation: Anti-Asian</p>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-divider">— Violent offenses against persons</div>
+
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#CC0000;"></div>
+    Murder / Non-Negligent Manslaughter
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#E8472A;"></div>
+    Rape / Sexual Assault
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#FF5500;"></div>
+    Aggravated Assault
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#FF8000;"></div>
+    Robbery
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#FFB300;"></div>
+    Simple Assault
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#FFE033;"></div>
+    Intimidation
+  </div>
+
+  <div class="legend-divider">— Property offenses</div>
+
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#7D4E00;"></div>
+    Arson
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#2D6A4F;"></div>
+    Destruction / Damage / Vandalism
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#1A5276;"></div>
+    Burglary
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#4A235A;"></div>
+    Larceny / Theft
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#7D3C98;"></div>
+    Motor Vehicle Theft
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#555555;"></div>
+    Other / Unknown
+  </div>
+</div>
+
+<!-- TABLE -->
+<div class="table-wrapper">
+<table>
+  <thead>
+    <tr>
+      <th class="year-col">Year</th>
+      <th class="total-col">Total</th>
+      <th class="offense" style="color:#CC0000;">Murder</th>
+      <th class="offense" style="color:#E8472A;">Rape</th>
+      <th class="offense" style="color:#FF5500;">Agg. Assault</th>
+      <th class="offense" style="color:#FF8000;">Robbery</th>
+      <th class="offense" style="color:#FFB300;">Simple Assault</th>
+      <th class="offense" style="color:#FFE033;">Intimidation</th>
+      <th class="offense" style="color:#7D4E00;">Arson</th>
+      <th class="offense" style="color:#2D6A4F;">Vandalism</th>
+      <th class="offense" style="color:#1A5276;">Burglary</th>
+      <th class="offense" style="color:#4A235A;">Larceny</th>
+      <th class="offense" style="color:#7D3C98;">MVT</th>
+      <th class="offense" style="color:#555555;">Other</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 1991 -->
+    <tr>
+      <td class="year-cell">1991</td>
+      <td class="total-cell gap-cell">—</td>
+      <td class="gap-cell" colspan="12">program not yet operational</td>
+    </tr>
+
+    <!-- 1992 -->
+    <tr>
+      <td class="year-cell">1992</td>
+      <td class="total-cell gap-cell">—</td>
+      <td class="gap-cell" colspan="12">first year of collection; data not recovered</td>
+    </tr>
+
+    <!-- 1993 -->
+    <tr>
+      <td class="year-cell">1993</td>
+      <td class="total-cell">258</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+    </tr>
+
+    <!-- 1994 -->
+    <tr>
+      <td class="year-cell">1994</td>
+      <td class="total-cell gap-cell">—</td>
+      <td class="gap-cell" colspan="12">annual figure not recovered</td>
+    </tr>
+
+    <!-- 1995 -->
+    <tr>
+      <td class="year-cell">1995</td>
+      <td class="total-cell">355</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+      <td class="empty-cell">·</td>
+    </tr>
+
+    <!-- 1996–1999 -->
+    <tr>
+      <td class="year-cell">1996</td>
+      <td class="total-cell gap-cell">—</td>
+      <td class="gap-cell" colspan="12">annual figure not recovered</td>
+    </tr>
+    <tr>
+      <td class="year-cell">1997</td>
+      <td class="total-cell gap-cell">—</td>
+      <td class="gap-cell" colspan="12">annual figure not recovered</td>
+    </tr>
+    <tr>
+      <td class="year-cell">1998</td>
+      <td class="total-cell gap-cell">—</td>
+      <td class="gap-cell" colspan="12">annual figure not recovered</td>
+    </tr>
+    <tr>
+      <td class="year-cell">1999</td>
+      <td class="total-cell gap-cell">—</td>
+      <td class="gap-cell" colspan="12">annual figure not recovered</td>
+    </tr>
+
+    <!-- 2000–2012: totals known, offense breakdown not year-specific -->
+    <tr>
+      <td class="year-cell">2000</td>
+      <td class="total-cell">281</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2001</td>
+      <td class="total-cell">280</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2002</td>
+      <td class="total-cell">217</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2003</td>
+      <td class="total-cell">231</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2004</td>
+      <td class="total-cell">217</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2005</td>
+      <td class="total-cell">199</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2006</td>
+      <td class="total-cell">181</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2007</td>
+      <td class="total-cell">188</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2008</td>
+      <td class="total-cell">137</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2009</td>
+      <td class="total-cell">126</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2010</td>
+      <td class="total-cell">150</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2011</td>
+      <td class="total-cell">175</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2012</td>
+      <td class="total-cell">152</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+
+    <!-- 2013: category split year -->
+    <tr>
+      <td class="year-cell">2013 <span class="flag-split">▸ category split</span></td>
+      <td class="total-cell">164</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2014</td>
+      <td class="total-cell">150</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2015</td>
+      <td class="total-cell">111</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2016</td>
+      <td class="total-cell">113</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2017</td>
+      <td class="total-cell">109</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2018</td>
+      <td class="total-cell">148</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+    <tr>
+      <td class="year-cell">2019</td>
+      <td class="total-cell">149</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+
+    <!-- 2020: verified breakdown from USCCR / FBI annual report -->
+    <tr>
+      <td class="year-cell">2020</td>
+      <td class="total-cell">279</td>
+      <td class="count-cell" style="background:#CC0000;">1</td>
+      <td class="count-cell" style="background:#E8472A;">1</td>
+      <td class="count-cell" style="background:#FF5500;">47</td>
+      <td class="count-cell" style="background:#FF8000;">9</td>
+      <td class="count-cell" style="background:#FFB300;">64</td>
+      <td class="count-cell" style="background:#FFE033; color:#333;">105</td>
+      <td class="count-cell" style="background:#7D4E00;">2</td>
+      <td class="count-cell" style="background:#2D6A4F;">42</td>
+      <td class="count-cell" style="background:#1A5276;">3</td>
+      <td class="count-cell" style="background:#4A235A;">3</td>
+      <td class="count-cell" style="background:#7D3C98;">1</td>
+      <td class="count-cell" style="background:#555555;">1</td>
+    </tr>
+
+    <!-- 2021: verified breakdown from FBI hate crime report Table 4 -->
+    <tr>
+      <td class="year-cell">2021 <span class="flag-peak">▸ peak</span> <span class="flag-nibrs">▸ NIBRS shift</span></td>
+      <td class="total-cell">746</td>
+      <td class="count-cell" style="background:#CC0000;">4</td>
+      <td class="count-cell" style="background:#E8472A;">3</td>
+      <td class="count-cell" style="background:#FF5500;">113</td>
+      <td class="count-cell" style="background:#FF8000;">20</td>
+      <td class="count-cell" style="background:#FFB300;">177</td>
+      <td class="count-cell" style="background:#FFE033; color:#333;">281</td>
+      <td class="count-cell" style="background:#7D4E00;">5</td>
+      <td class="count-cell" style="background:#2D6A4F;">121</td>
+      <td class="count-cell" style="background:#1A5276;">8</td>
+      <td class="count-cell" style="background:#4A235A;">8</td>
+      <td class="count-cell" style="background:#7D3C98;">3</td>
+      <td class="count-cell" style="background:#555555;">3</td>
+    </tr>
+
+    <!-- 2022 -->
+    <tr>
+      <td class="year-cell">2022</td>
+      <td class="total-cell">380</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+
+    <!-- 2023 -->
+    <tr>
+      <td class="year-cell">2023</td>
+      <td class="total-cell">407</td>
+      <td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td><td class="empty-cell">·</td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+<!-- NOTES -->
+<div class="notes">
+  <p><span class="note-verified">Offense counts for 2020 and 2021 are derived from FBI annual hate crime report Table 4 (offense type by bias motivation). These are the only two years for which anti-Asian offense-type breakdowns have been recovered so far.</span></p>
+  <p><span class="note-gap">· = total is known but offense-type breakdown not yet pulled from FBI annual reports or Crime Data Explorer.</span></p>
+  <p><span class="note-gap">— = total incident count is also unknown for this year. See fbi_anti_asian_annual.csv for data_status notes.</span></p>
+  <p style="color:#3a3010;">▸ NIBRS shift: FBI transitioned from UCR Summary Reporting to NIBRS in 2021, reducing participating agencies from ~15,138 to ~11,834. The 2021 total is real but least comparably measured.</p>
+  <p style="color:#10253a;">▸ category split: OMB mandated separation of "Asian" from "Native Hawaiian or Other Pacific Islander" beginning 2013. Pre-2013 totals include Pacific Islander victims.</p>
+  <p style="color:#3a1010;">▸ peak: highest year on record.</p>
+  <p style="margin-top:12px; color:#2a2a2a;">Offense breakdown for all remaining years is retrievable from the FBI Crime Data Explorer (cde.ucr.cjis.gov) — bias motivation: Anti-Asian; table type: offense type by bias motivation; per year.</p>
+</div>
+
+</body>
+</html>
