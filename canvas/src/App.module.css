@@ -12,18 +12,30 @@
   overflow: hidden;
 }
 
-.canvasLayer::before {
-  content: '';
+.gradientLayer {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 30% 60%, rgba(232, 197, 184, 0.18) 0%, transparent 70%);
-  transition: opacity 1.2s ease;
   pointer-events: none;
   z-index: 1;
+  transition: opacity 1.2s ease;
 }
 
-.sahAct::before {
+.gradientWarm {
+  background: radial-gradient(ellipse at 30% 60%, rgba(232, 197, 184, 0.18) 0%, transparent 70%);
+  opacity: 1;
+}
+
+.gradientCool {
   background: radial-gradient(ellipse at 70% 40%, rgba(123, 155, 181, 0.18) 0%, transparent 70%);
+  opacity: 0;
+}
+
+.gradientWarm.fadeOut {
+  opacity: 0;
+}
+
+.gradientCool.fadeIn {
+  opacity: 1;
 }
 
 .scrollProgress {

@@ -1,3 +1,6 @@
+// Wave types encode severity: sawtooth = high-severity violent, square = mid-severity violent, sine = non-violent
+// simple_assault uses square (mid-violent) to distinguish from aggravated assault (sawtooth)
+
 // Tone scale tables
 const FBI_TONES = {
   murder:              { wave: 'sawtooth', freq: 1800 },

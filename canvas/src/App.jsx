@@ -7,14 +7,14 @@ import StaticSummary from './components/StaticSummary.jsx'
 import styles from './App.module.css'
 
 export default function App() {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (prefersReducedMotion) return <StaticSummary />
-
   const [act, setAct] = useState('fbi')
   const [currentYear, setCurrentYear] = useState(1993)
   const [spawnCount, setSpawnCount] = useState(0)
   const [scrolled, setScrolled] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [prefersReducedMotion] = useState(() =>
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
   const sentinelRef = useRef(null)
   const transitionRef = useRef(null)
 
@@ -61,9 +61,13 @@ export default function App() {
     setSpawnCount(c => c + 1)
   }, [])
 
+  if (prefersReducedMotion) return <StaticSummary />
+
   return (
     <div className={styles.root}>
-      <div className={`${styles.canvasLayer} ${act === 'sah' ? styles.sahAct : ''}`}>
+      <div className={styles.canvasLayer}>
+        <div className={`${styles.gradientLayer} ${styles.gradientWarm} ${act === 'sah' ? styles.fadeOut : ''}`} aria-hidden="true" />
+        <div className={`${styles.gradientLayer} ${styles.gradientCool} ${act === 'sah' ? styles.fadeIn : ''}`} aria-hidden="true" />
         <GenerativeCanvas
           act={act}
           onYearChange={handleYearChange}
