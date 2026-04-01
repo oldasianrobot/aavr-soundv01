@@ -3,9 +3,13 @@ import GenerativeCanvas from './components/GenerativeCanvas.jsx'
 import ActLabel from './components/ActLabel.jsx'
 import IncidentCounter from './components/IncidentCounter.jsx'
 import SoundToggle from './components/SoundToggle.jsx'
+import StaticSummary from './components/StaticSummary.jsx'
 import styles from './App.module.css'
 
 export default function App() {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (prefersReducedMotion) return <StaticSummary />
+
   const [act, setAct] = useState('fbi')
   const [currentYear, setCurrentYear] = useState(1993)
   const [spawnCount, setSpawnCount] = useState(0)
