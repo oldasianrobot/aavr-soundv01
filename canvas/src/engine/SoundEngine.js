@@ -27,10 +27,28 @@ const SAH_TONES = {
 
 const MAX_VOICES = 8
 
+// Build a synthetic reverb impulse response: exponentially decaying stereo noise
+function buildImpulse(ctx, duration, decay) {
+  const length = Math.floor(ctx.sampleRate * duration)
+  const buf = ctx.createBuffer(2, length, ctx.sampleRate)
+  for (let c = 0; c < 2; c++) {
+    const ch = buf.getChannelData(c)
+    for (let i = 0; i < length; i++) {
+      ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay)
+    }
+  }
+  return buf
+}
+
 const SoundEngine = {
   _ctx: null,
   _muted: true,
   _voices: [],
+  // Shared signal chain nodes (created on first init)
+  _filter: null,   // BiquadFilter — lowpass, cuts harsh highs
+  _reverb: null,   // ConvolverNode — adds space/warmth
+  _reverbGain: null,
+  _dryGain: null,
 
   get isMuted() { return this._muted },
 
@@ -38,6 +56,30 @@ const SoundEngine = {
     if (this._ctx) return
     this._ctx = new AudioContext()
     if (this._ctx.state === 'suspended') this._ctx.resume()
+
+    // Shared lowpass filter — roll off above 1600 Hz to remove harshness
+    this._filter = this._ctx.createBiquadFilter()
+    this._filter.type = 'lowpass'
+    this._filter.frequency.value = 1600
+    this._filter.Q.value = 0.7
+
+    // Synthetic room reverb (~1.2s, gentle decay)
+    this._reverb = this._ctx.createConvolver()
+    this._reverb.buffer = buildImpulse(this._ctx, 1.2, 2.5)
+
+    // Dry/wet mix: 65% direct, 35% reverb
+    this._dryGain = this._ctx.createGain()
+    this._dryGain.gain.value = 0.65
+    this._reverbGain = this._ctx.createGain()
+    this._reverbGain.gain.value = 0.35
+
+    // Routing: filter → dryGain → destination
+    //                 → reverb → reverbGain → destination
+    this._filter.connect(this._dryGain)
+    this._dryGain.connect(this._ctx.destination)
+    this._filter.connect(this._reverb)
+    this._reverb.connect(this._reverbGain)
+    this._reverbGain.connect(this._ctx.destination)
   },
 
   mute()   { this._muted = true },
@@ -70,12 +112,13 @@ const SoundEngine = {
     osc.type = wave
     osc.frequency.setValueAtTime(freq, now)
     osc.connect(gain)
-    gain.connect(this._ctx.destination)
+    // Route each voice through the shared filter chain instead of direct to destination
+    gain.connect(this._filter)
 
-    const attackTime  = isViolent ? 0.002 : 0.005
-    const sustainTime = isViolent ? 0.05  : 0.08
-    const releaseTime = isViolent ? 0.05  : 0.2
-    const peakGain    = isViolent ? 0.18  : 0.12
+    const attackTime  = isViolent ? 0.002 : 0.008
+    const sustainTime = isViolent ? 0.04  : 0.10
+    const releaseTime = isViolent ? 0.08  : 0.35
+    const peakGain    = isViolent ? 0.15  : 0.10
 
     gain.gain.setValueAtTime(0, now)
     gain.gain.linearRampToValueAtTime(peakGain, now + attackTime)
@@ -96,9 +139,14 @@ const SoundEngine = {
   },
 
   _reset() {
+    if (this._ctx) { try { this._ctx.close() } catch (_) {} }
     this._ctx = null
     this._muted = true
     this._voices = []
+    this._filter = null
+    this._reverb = null
+    this._reverbGain = null
+    this._dryGain = null
   },
 }
 

@@ -7,7 +7,6 @@ export default function SoundToggle() {
 
   function handleToggle() {
     if (muted) {
-      SoundEngine.init()
       SoundEngine.unmute()
       setMuted(false)
     } else {
@@ -24,7 +23,7 @@ export default function SoundToggle() {
       aria-label={muted ? 'Enable sound' : 'Disable sound'}
     >
       <span className={`${styles.dot} ${!muted ? styles.active : ''}`} aria-hidden="true" />
-      {muted ? 'Sound off' : 'Sound on'}
+      {muted ? 'Enable Sound' : 'Disable Sound'}
     </button>
   )
 }

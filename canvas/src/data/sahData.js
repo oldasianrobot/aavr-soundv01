@@ -11,15 +11,15 @@ export const SAH_YEARS = Object.keys(YEAR_DATA).map(Number)
 const MIN_COUNT = 497
 const MAX_COUNT = 4533
 
-// Weighted palette: dusty rose / slate blue / terracotta tones.
+// Weighted palette: colors run red (violent/physical) → cool (non-physical)
 // Weights based on STOP AAPI Hate 2020-2021 report proportions.
 const OFFENSE_PALETTE = [
-  { key: 'verbal_harassment', color: '#E8C5B8', weight: 0.600 }, // 60% — dusty rose
-  { key: 'physical_assault',  color: '#C4704A', weight: 0.152 }, // 15.2% — terracotta
-  { key: 'avoidance',         color: '#7B9BB5', weight: 0.152 }, // 15.2% — slate blue
-  { key: 'civil_rights',      color: '#9EB5C4', weight: 0.049 }, // 4.9% — soft blue
-  { key: 'online_harassment', color: '#D4A8A0', weight: 0.028 }, // 2.8% — muted rose
-  { key: 'property_damage',   color: '#B8A898', weight: 0.019 }, // 1.9% — warm gray
+  { key: 'verbal_harassment', color: '#3E8A9E', weight: 0.600 }, // teal — most common, non-physical
+  { key: 'physical_assault',  color: '#CC1818', weight: 0.152 }, // crimson — violent
+  { key: 'avoidance',         color: '#7B8FA0', weight: 0.152 }, // cool grey-blue
+  { key: 'civil_rights',      color: '#59895A', weight: 0.049 }, // sage green
+  { key: 'online_harassment', color: '#2E6BAF', weight: 0.028 }, // slate blue
+  { key: 'property_damage',   color: '#B06030', weight: 0.019 }, // warm brown
 ]
 
 const CUMULATIVE = OFFENSE_PALETTE.reduce((acc, item, i) => {
@@ -37,7 +37,7 @@ export function sampleOffense() {
 }
 
 export function sampleIncidentCount() {
-  const counts = Object.values(YEAR_DATA)
+  const counts = Object.values(YEAR_DATA).filter(c => c > 0)
   return counts[Math.floor(Math.random() * counts.length)]
 }
 
@@ -45,10 +45,3 @@ export function getYearCount(year) {
   return YEAR_DATA[year] ?? 0
 }
 
-export function incidentToSize(count) {
-  return 1.2 + ((count - MIN_COUNT) / (MAX_COUNT - MIN_COUNT)) * (5.5 - 1.2)
-}
-
-export function incidentToTrailLength(count) {
-  return Math.round(6 + ((count - MIN_COUNT) / (MAX_COUNT - MIN_COUNT)) * (22 - 6))
-}

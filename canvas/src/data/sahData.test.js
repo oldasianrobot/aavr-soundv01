@@ -2,8 +2,6 @@ import { describe, it, expect } from 'vitest'
 import {
   sampleOffense,
   sampleIncidentCount,
-  incidentToSize,
-  incidentToTrailLength,
   SAH_YEARS,
   getYearCount,
 } from './sahData.js'
@@ -33,6 +31,9 @@ describe('getYearCount', () => {
     expect(getYearCount(2021)).toBe(4533)
     expect(getYearCount(2023)).toBe(1751)
   })
+  it('returns 0 for a year outside the dataset', () => {
+    expect(getYearCount(2019)).toBe(0)
+  })
 })
 
 describe('SAH_YEARS', () => {
@@ -42,21 +43,13 @@ describe('SAH_YEARS', () => {
   })
 })
 
-describe('incidentToSize', () => {
-  it('maps min to ~1.2', () => expect(incidentToSize(497)).toBeCloseTo(1.2, 1))
-  it('maps max to ~5.5', () => expect(incidentToSize(4533)).toBeCloseTo(5.5, 1))
-})
-
-describe('incidentToTrailLength', () => {
-  it('maps min to 6', () => expect(incidentToTrailLength(497)).toBeCloseTo(6, 0))
-  it('maps max to 22', () => expect(incidentToTrailLength(4533)).toBeCloseTo(22, 0))
-})
-
 describe('sampleIncidentCount', () => {
-  it('returns a value from the known set', () => {
+  it('returns a positive integer from the known set', () => {
     const KNOWN = [3795, 4533, 2227, 1751, 497]
     for (let i = 0; i < 50; i++) {
-      expect(KNOWN).toContain(sampleIncidentCount())
+      const count = sampleIncidentCount()
+      expect(count).toBeGreaterThan(0)
+      expect(KNOWN).toContain(count)
     }
   })
 })

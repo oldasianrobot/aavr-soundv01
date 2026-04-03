@@ -1,30 +1,32 @@
 // Annual incident counts indexed by year. 0 = no data (gap year).
+// Source: FBI UCR Hate Crime Statistics, Table 1 (Anti-Asian). 1993–2024.
+// 1994 = n/a (not collected that year).
 const YEAR_DATA = {
-  1991: 0, 1992: 0, 1993: 258, 1994: 0, 1995: 355,
-  1996: 0, 1997: 0, 1998: 0, 1999: 0, 2000: 281,
-  2001: 280, 2002: 217, 2003: 231, 2004: 217, 2005: 146,
-  2006: 181, 2007: 148, 2008: 149, 2009: 189, 2010: 150,
-  2011: 135, 2012: 130, 2013: 135, 2014: 111, 2015: 111,
-  2016: 113, 2017: 109, 2018: 148, 2019: 158, 2020: 274,
-  2021: 746, 2022: 380, 2023: 407,
+  1993: 258, 1994:   0,
+  1995: 355, 1996: 355, 1997: 347, 1998: 293, 1999: 298,
+  2000: 281, 2001: 280, 2002: 217, 2003: 231, 2004: 217, 2005: 199,
+  2006: 181, 2007: 188, 2008: 137, 2009: 126, 2010: 150,
+  2011: 138, 2012: 121, 2013: 135, 2014: 140, 2015: 111,
+  2016: 113, 2017: 131, 2018: 148, 2019: 158,
+  2020: 358, 2021: 781, 2022: 531, 2023: 441, 2024: 336,
 }
 
 export const FBI_YEARS = Object.keys(YEAR_DATA).map(Number)
-const MIN_COUNT = 109
-const MAX_COUNT = 746
+const MIN_COUNT = 111
+const MAX_COUNT = 781
 
-// Weighted offense palette: [key, color, weight]
+// Weighted offense palette: colors run red (violent felony) → cool (non-violent misdemeanor)
 const OFFENSE_PALETTE = [
-  { key: 'murder',             color: '#CC0000', weight: 0.005 },
-  { key: 'aggravated_assault', color: '#FF5500', weight: 0.13  },
-  { key: 'simple_assault',     color: '#FFB300', weight: 0.24  },
-  { key: 'intimidation',       color: '#FFE033', weight: 0.355 },
-  { key: 'vandalism',          color: '#2D6A4F', weight: 0.27  },
-  { key: 'robbery',            color: '#FF8000', weight: 0.005 },
-  { key: 'arson',              color: '#7D4E00', weight: 0.005 },
-  { key: 'burglary',           color: '#1A5276', weight: 0.005 },
-  { key: 'larceny',            color: '#4A235A', weight: 0.005 },
-  { key: 'motor_vehicle_theft',color: '#7D3C98', weight: 0.005 },
+  { key: 'murder',             color: '#B81C1C', weight: 0.005 }, // deep crimson
+  { key: 'aggravated_assault', color: '#D63B00', weight: 0.13  }, // red-orange
+  { key: 'robbery',            color: '#E05500', weight: 0.005 }, // orange-red
+  { key: 'arson',              color: '#D97000', weight: 0.005 }, // burnt orange
+  { key: 'simple_assault',     color: '#B89000', weight: 0.24  }, // amber — mid severity
+  { key: 'intimidation',       color: '#59895A', weight: 0.355 }, // sage green
+  { key: 'vandalism',          color: '#3E8A9E', weight: 0.27  }, // teal
+  { key: 'burglary',           color: '#2E6BAF', weight: 0.005 }, // slate blue
+  { key: 'larceny',            color: '#1A4F8A', weight: 0.005 }, // deep blue
+  { key: 'motor_vehicle_theft',color: '#4A3584', weight: 0.005 }, // indigo
 ]
 
 // Precompute cumulative weights
@@ -54,12 +56,3 @@ export function getYearCount(year) {
   return YEAR_DATA[year] ?? 0
 }
 
-// Normalize count → particle size [1.2, 5.5]
-export function incidentToSize(count) {
-  return 1.2 + ((count - MIN_COUNT) / (MAX_COUNT - MIN_COUNT)) * (5.5 - 1.2)
-}
-
-// Normalize count → trail length [6, 22]
-export function incidentToTrailLength(count) {
-  return Math.round(6 + ((count - MIN_COUNT) / (MAX_COUNT - MIN_COUNT)) * (22 - 6))
-}

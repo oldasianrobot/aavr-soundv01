@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import styles from './ActLabel.module.css'
 
 const ACT_META = {
-  fbi: { dataset: 'FBI UCR', title: 'Anti-Asian Hate Crimes', range: '1991 – 2023' },
-  transition: { dataset: 'FBI UCR', title: 'Anti-Asian Hate Crimes', range: '1991 – 2023' },
+  fbi: { dataset: 'FBI UCR', title: 'Anti-Asian Hate Crimes', range: '1993 – 2024' },
   sah: { dataset: 'STOP AAPI Hate', title: 'Reported Incidents', range: '2020 – 2024' },
 }
 
@@ -12,10 +11,6 @@ export default function ActLabel({ act, currentYear }) {
   const [meta, setMeta] = useState(ACT_META.fbi)
 
   useEffect(() => {
-    if (act === 'transition') {
-      setVisible(false)
-      return
-    }
     setVisible(false)
     const t = setTimeout(() => {
       setMeta(ACT_META[act] || ACT_META.fbi)

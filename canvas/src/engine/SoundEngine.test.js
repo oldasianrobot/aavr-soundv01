@@ -19,13 +19,28 @@ const mockGain = {
   connect: vi.fn(),
   disconnect: vi.fn(),
 }
+const mockFilter = {
+  type: '',
+  frequency: { value: 0 },
+  Q: { value: 0 },
+  connect: vi.fn(),
+}
+const mockConvolver = {
+  buffer: null,
+  connect: vi.fn(),
+}
 const mockContext = {
   createOscillator: vi.fn(() => ({ ...mockOscillator })),
   createGain: vi.fn(() => ({ ...mockGain })),
+  createBiquadFilter: vi.fn(() => ({ ...mockFilter })),
+  createConvolver: vi.fn(() => ({ ...mockConvolver })),
+  createBuffer: vi.fn(() => ({ getChannelData: vi.fn(() => new Float32Array(100)) })),
   destination: {},
   currentTime: 0,
+  sampleRate: 44100,
   state: 'running',
   resume: vi.fn(),
+  close: vi.fn(),
 }
 
 beforeEach(() => {
@@ -36,6 +51,10 @@ beforeEach(() => {
   })
   mockContext.createOscillator.mockClear()
   mockContext.createGain.mockClear()
+  mockContext.createBiquadFilter.mockClear()
+  mockContext.createConvolver.mockClear()
+  mockContext.createBuffer.mockClear()
+  mockContext.close.mockClear()
   SoundEngine._reset()
 })
 
@@ -74,13 +93,17 @@ describe('SoundEngine', () => {
   it('evicts oldest voice when MAX_VOICES (8) is exceeded', () => {
     SoundEngine.init()
     SoundEngine.unmute()
-    // Fill to capacity
     for (let i = 0; i < 8; i++) {
       SoundEngine.playTone('intimidation', 'fbi')
     }
     expect(SoundEngine._voices.length).toBe(8)
-    // 9th tone should evict oldest
     SoundEngine.playTone('intimidation', 'fbi')
     expect(SoundEngine._voices.length).toBe(8)
+  })
+
+  it('_reset closes AudioContext to prevent leaks', () => {
+    SoundEngine.init()
+    SoundEngine._reset()
+    expect(mockContext.close).toHaveBeenCalled()
   })
 })

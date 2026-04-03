@@ -2,8 +2,6 @@ import { describe, it, expect } from 'vitest'
 import {
   sampleOffense,
   sampleIncidentCount,
-  incidentToSize,
-  incidentToTrailLength,
   FBI_YEARS,
   getYearCount,
 } from './fbiData.js'
@@ -31,34 +29,30 @@ describe('sampleOffense', () => {
   })
 })
 
-describe('incidentToSize', () => {
-  it('maps min incident count to min size', () => {
-    expect(incidentToSize(109)).toBeCloseTo(1.2, 1)
+describe('sampleIncidentCount', () => {
+  it('returns a positive integer', () => {
+    const count = sampleIncidentCount()
+    expect(count).toBeGreaterThan(0)
+    expect(Number.isInteger(count)).toBe(true)
   })
-  it('maps max incident count to max size', () => {
-    expect(incidentToSize(746)).toBeCloseTo(5.5, 1)
-  })
-})
-
-describe('incidentToTrailLength', () => {
-  it('maps min to 6', () => expect(incidentToTrailLength(109)).toBeCloseTo(6, 0))
-  it('maps max to 22', () => expect(incidentToTrailLength(746)).toBeCloseTo(22, 0))
 })
 
 describe('getYearCount', () => {
   it('returns incident count for a known year', () => {
-    expect(getYearCount(2021)).toBe(746)
-    expect(getYearCount(2023)).toBe(407)
+    expect(getYearCount(2021)).toBe(781)
+    expect(getYearCount(2023)).toBe(441)
   })
-  it('returns 0 for a gap year', () => {
-    expect(getYearCount(1991)).toBe(0)
-    expect(getYearCount(1997)).toBe(0)
+  it('returns 0 for the 1994 gap year', () => {
+    expect(getYearCount(1994)).toBe(0)
+  })
+  it('returns 0 for a year outside the dataset', () => {
+    expect(getYearCount(1990)).toBe(0)
   })
 })
 
 describe('FBI_YEARS', () => {
-  it('spans 1991 to 2023', () => {
-    expect(FBI_YEARS[0]).toBe(1991)
-    expect(FBI_YEARS[FBI_YEARS.length - 1]).toBe(2023)
+  it('spans 1993 to 2024', () => {
+    expect(FBI_YEARS[0]).toBe(1993)
+    expect(FBI_YEARS[FBI_YEARS.length - 1]).toBe(2024)
   })
 })
