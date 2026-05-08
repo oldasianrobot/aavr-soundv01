@@ -72,7 +72,7 @@ STOP AAPI Hate: https://stopaapihate.org/
 ## Running Locally
 
 ```bash
-cd canvas
+cd aavr-soundv01
 npm install
 npm run dev
 ```
@@ -84,7 +84,7 @@ Runs at `http://localhost:5173`.
 ## Project Structure
 
 ```
-canvas/src/
+aavr-soundv01/src/
 ├── App.jsx                  # Phase state machine, transitions, layout
 ├── components/
 │   ├── GenerativeCanvas.jsx # Bar spawning, rAF loop, canvas rendering
