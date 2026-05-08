@@ -1,4 +1,4 @@
-# This Is Not a Gap — Sound Canvas
+# Anti-Asian Violence and Racism — Sound v01
 
 A two-act, scroll-free data visualization of anti-Asian hate crimes in the United States,
 expressed through generative sound and visual composition.
@@ -7,7 +7,7 @@ expressed through generative sound and visual composition.
 
 ## The Work
 
-*This Is Not a Gap* is part of a series examining the documented record of anti-Asian
+*Anti-Asian Violence and Racism* is part of a series examining the documented record of anti-Asian
 hate in America — and more critically, what that record fails to capture.
 
 The piece runs in two acts:
@@ -27,7 +27,7 @@ The gap between those two numbers is not a footnote. It is the subject of this w
 
 ## Why Sound?
 
-*This Is Not a Gap* uses sound not as decoration but as a second language for the
+*Anti-Asian Violence and Racism* uses sound not as decoration but as a second language for the
 same data. Each incident spawns both a visual bar and a synthesized tone — violent
 offenses rendered as high-frequency, harsh sawtooth waves; non-violent offenses as
 lower, warmer sine tones. The density of what you hear in any given moment directly

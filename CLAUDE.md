@@ -1,4 +1,4 @@
-# CLAUDE.md — This Is Not a Gap: Sound Canvas
+# CLAUDE.md — Anti-Asian Violence and Racism: Sound v01
 
 ## Project Overview
 
