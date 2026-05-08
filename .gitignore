@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Accidental API response dumps
+response.json
