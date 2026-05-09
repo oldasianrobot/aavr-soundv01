@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import GenerativeCanvas from './components/GenerativeCanvas.jsx'
 import ActLabel from './components/ActLabel.jsx'
 import IncidentCounter from './components/IncidentCounter.jsx'
@@ -175,6 +176,9 @@ export default function App() {
           {gateText}
         </span>
       </div>
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   )
 }
